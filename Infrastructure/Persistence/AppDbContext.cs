@@ -1,30 +1,25 @@
-using Microsoft.EntityFrameworkCore;
 using CleanShop.Domain.Entities;
-using CleanShop.Infrastructure.Configurations;
+using Microsoft.EntityFrameworkCore;
 
-namespace CleanShop.Infrastructure
+namespace CleanShop.Infrastructure.Persistence
 {
-    public class ApplicationDbContext : DbContext
+    public class AppDbContext : DbContext
     {
-        public DbSet<Countries> Countries { get; set; }
-        public DbSet<Regions> Regions { get; set; }
-        public DbSet<Cities> Cities { get; set; }
-        public DbSet<Company> Companies { get; set; }
-        public DbSet<Branch> Branches { get; set; }
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-            : base(options) { }
+        // DbSets
+        public DbSet<Country> Countries => Set<Country>();
+        public DbSet<Region> Regions => Set<Region>();
+        public DbSet<City> Cities => Set<City>();
+        public DbSet<Company> Companies => Set<Company>();
+        public DbSet<Branch> Branches => Set<Branch>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // Configurar las entidades usando la fluent API
-            modelBuilder.ApplyConfiguration(new CountryConfiguration());
-            modelBuilder.ApplyConfiguration(new RegionConfiguration());
-            modelBuilder.ApplyConfiguration(new CityConfiguration());
-            modelBuilder.ApplyConfiguration(new CompanyConfiguration());
-            modelBuilder.ApplyConfiguration(new BranchConfiguration());
+            // ✅ Aplica todas las configuraciones IEntityTypeConfiguration automáticamente
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
         }
     }
 }
