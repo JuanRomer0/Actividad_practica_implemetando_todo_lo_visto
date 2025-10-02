@@ -1,7 +1,10 @@
+using System.Reflection;
 using CleanShop.Application.Abstractions;
+using CleanShop.Application.Mappings;
 using CleanShop.Infrastructure.Persistence;
 using CleanShop.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +18,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddControllers();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddAutoMapper(Assembly.GetEntryAssembly());
 
 
 var app = builder.Build();
